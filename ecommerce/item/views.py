@@ -11,4 +11,12 @@ class ItemDetailView(DetailView):
     model = Item
     template_name = 'detail.html'  # Correct this to reflect the correct path
     context_object_name = 'item'
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        item = self.get_object()  # Get the current item
+        # Add related items to the context
+        context['related_items'] = Item.objects.filter(
+            category=item.category,
+            is_sold=False
+        ).exclude(slug=item.slug)
+        return context
