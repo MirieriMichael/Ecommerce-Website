@@ -22,7 +22,8 @@ from django.contrib import admin
 
 urlpatterns = [
     path('', include('core.urls')),
-    path('items/', include('item.urls')),  # Ensure item URLs are included here
+    path('items/', include('item.urls')), 
+      # Ensure item URLs are included here
     # path('contact/', contact, name='contact'),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
