@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-#dp#+46=9**h0a-o_#8qv6$rg-+56^)pr9mwh+2uyvhe!&v&ly
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+LOGIN_URL='/login/'
+LOGIN_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL='/'
 
 # Application definition
 
@@ -59,6 +61,7 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': True,  # Enable this for more detailed error messages
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -68,6 +71,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
