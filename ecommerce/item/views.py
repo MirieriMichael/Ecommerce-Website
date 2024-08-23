@@ -7,7 +7,7 @@
 from django.views.generic import DetailView
 from .models import Item
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .forms import NewItemForm
 class ItemDetailView(DetailView):
     model = Item
@@ -38,3 +38,8 @@ def new_Item(request):
         'form': form,
         'title': 'Add Item'
     })
+@login_required
+def delete(request,slug):
+    item=get_object_or_404(Item,slug=slug,created_by=request.user)
+    item.delete()
+    return redirect('dashboard:index')
