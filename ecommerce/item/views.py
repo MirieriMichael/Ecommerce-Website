@@ -8,7 +8,7 @@ from django.views.generic import DetailView
 from .models import Item
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,get_object_or_404
-from .forms import NewItemForm
+from .forms import NewItemForm,EditItemForm
 class ItemDetailView(DetailView):
     model = Item
     template_name = 'detail.html'  # Correct this to reflect the correct path
@@ -43,3 +43,18 @@ def delete(request,slug):
     item=get_object_or_404(Item,slug=slug,created_by=request.user)
     item.delete()
     return redirect('dashboard:index')
+@login_required
+def edit(request,slug):
+    item=get_object_or_404(Item,slug=slug,created_by=request.user)
+    if request.method == 'POST':
+        form = EditItemForm(request.POST, request.FILES, request=request,instance=item)  # Pass 'request' here
+        if form.is_valid():
+           form.save()
+           return redirect('item:detail', slug=form.instance.slug)  # Assuming you have a slug
+    else:
+        form = EditItemForm(instance=item)  # Pass 'request' here for the GET request
+    
+    return render(request, 'form.html', {
+        'form': form,
+        'title': 'Add Item'
+    })
