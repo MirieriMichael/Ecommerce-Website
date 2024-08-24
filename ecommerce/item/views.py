@@ -5,10 +5,11 @@
 #     item = get_object_or_404(Item, slug=slug)
 #     return render(request, 'item/detail.html', {'item': item})
 from django.views.generic import DetailView
-from .models import Item
+from .models import Item,Category
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import NewItemForm,EditItemForm
+from django.db.models import Q
 class ItemDetailView(DetailView):
     model = Item
     template_name = 'detail.html'  # Correct this to reflect the correct path
@@ -57,4 +58,26 @@ def edit(request,slug):
     return render(request, 'form.html', {
         'form': form,
         'title': 'Add Item'
+    })
+def items(request):
+    query = request.GET.get('query', '')
+    category_slug = request.GET.get('category', '')  # Get the category slug from the query string
+    categories = Category.objects.all()
+
+    print("Category Slug:", category_slug)  # Debugging line
+    items = Item.objects.filter(is_sold=False)
+
+    if category_slug:  # Ensure it's not an empty string
+        items = items.filter(category__slug=category_slug)  # Filter by the selected category
+
+    if query:
+        items = items.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+
+    return render(request, 'item/items.html', {
+        'items': items,
+        'query': query,
+        'categories': categories,
+        'selected_category_slug': category_slug,  # Pass the selected category slug to the template
     })
