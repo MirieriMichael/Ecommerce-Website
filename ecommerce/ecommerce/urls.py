@@ -26,6 +26,7 @@ urlpatterns = [
     path('dashboard/',include('dashboard.urls')),
       # Ensure item URLs are included here
     # path('contact/', contact, name='contact'),
+    path('communication/',include('communication.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
